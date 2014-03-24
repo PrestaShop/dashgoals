@@ -41,10 +41,11 @@ class DashGoals extends Module
 		$this->name = 'dashgoals';
 		$this->displayName = 'Dashboard Goals';
 		$this->tab = 'dashboard';
-		$this->version = '0.1';
+		$this->version = '0.2';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
+		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
 		Dashgoals::$month_labels = array(
 			'01' => $this->l('January'),
