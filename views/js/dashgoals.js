@@ -10,8 +10,10 @@ function bar_chart_goals(widget_name, chart_details)
 			.stacked(true)
 			.showControls(false)
 			.tooltipContent(function(key, y, e, graph) {
+				if (graph.value == 0)
+					return '';
 
-				if (key == 'sales_real' || key == 'avg_cart_value_real') {
+				if (key == 'sales_real') {
 					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + formatCurrency(parseInt(graph.point.sales), currency_format, currency_sign, currency_blank) + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')<br/>';
 					if (graph.point.sales > graph.point.goal)
 						result += '<span class="dash_trend dash_trend_up">+';
@@ -19,12 +21,27 @@ function bar_chart_goals(widget_name, chart_details)
 						result += '<span class="dash_trend dash_trend_down">';
 					result += graph.point.goal_diff + '%</span></div>';
 					return result;
-				} else if (key == 'sales_less' || key == 'avg_cart_value_less') {
+				} else if (key == 'sales_less') {
 					if (graph.point.sales > 0)
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 					else
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
-				} else if (key == 'sales_more' || key == 'avg_cart_value_more')
+				} else if (key == 'sales_more')
+					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
+				else if (key == 'avg_cart_value_real') {
+					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + formatCurrency(parseInt(graph.point.avg_cart_value), currency_format, currency_sign, currency_blank) + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')<br/>';
+					if (graph.point.avg_cart_value > graph.point.goal)
+						result += '<span class="dash_trend dash_trend_up">+';
+					else
+						result += '<span class="dash_trend dash_trend_down">';
+					result += graph.point.goal_diff + '%</span></div>';
+					return result;
+				} else if (key == 'avg_cart_value_less') {
+					if (graph.point.avg_cart_value > 0)
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
+					else
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
+				} else if (key == 'avg_cart_value_more')
 					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 				else if (key == 'traffic_real') {
 					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.point.traffic + ' ' +graph.series.unit_text+'</strong><br />(' + graph.point.goal + ' ' +graph.series.unit_text+')<br/>';
