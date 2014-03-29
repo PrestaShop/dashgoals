@@ -296,13 +296,13 @@ class DashGoals extends Module
 				$value = ((isset($orders[$timestamp]) && $orders[$timestamp] && isset($sales[$timestamp]) && $sales[$timestamp]) ? ($sales[$timestamp] / $orders[$timestamp]) : 0);
 				$stream_values = $this->getValuesFromGoals($average_goals['avg_cart_value'], $month_goal, $value, Dashgoals::$month_labels[$i]);
 				$goal_diff = $value - $month_goal;
-				$stream_values['real']['sales'] = $value;
+				$stream_values['real']['avg_cart_value'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
 					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
 
-				$stream_values['less']['sales'] = $value;
-				$stream_values['more']['sales'] = $value;
+				$stream_values['less']['avg_cart_value'] = $value;
+				$stream_values['more']['avg_cart_value'] = $value;
 
 				if ($value > 0 && $value < $month_goal)
 					$stream_values['less']['goal_diff'] = $goal_diff;
@@ -425,13 +425,13 @@ class DashGoals extends Module
 				$value = ((isset($orders[$timestamp]) && $orders[$timestamp] && isset($sales[$timestamp]) && $sales[$timestamp]) ? ($sales[$timestamp] / $orders[$timestamp]) : 0);
 				$stream_values = $this->getValuesFromGoals($average_goals['avg_cart_value'], $month_goal, $value, Dashgoals::$month_labels[$i]);
 				$goal_diff = $value - $month_goal;
-				$stream_values['real']['sales'] = $value;
+				$stream_values['real']['avg_cart_value'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
 					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
 
-				$stream_values['less']['sales'] = $value;
-				$stream_values['more']['sales'] = $value;
+				$stream_values['less']['avg_cart_value'] = $value;
+				$stream_values['more']['avg_cart_value'] = $value;
 
 				if ($value > 0 && $value < $month_goal)
 					$stream_values['less']['goal_diff'] = $goal_diff;
