@@ -41,7 +41,7 @@ class DashGoals extends Module
 		$this->name = 'dashgoals';
 		$this->displayName = 'Dashboard Goals';
 		$this->tab = 'dashboard';
-		$this->version = '0.3';
+		$this->version = '0.4';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -209,7 +209,7 @@ class DashGoals extends Module
 					'disabled' => $stream_type['type'] == 'sales' ? false : true
 				);
 
-			$average_goals[$stream_type] = 0;
+			$average_goals[$stream_type['type']] = 0;
 		}
 
 		if (Configuration::get('PS_DASHBOARD_SIMULATION'))
