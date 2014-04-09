@@ -181,9 +181,9 @@ class DashGoals extends Module
 		// There are stream types (different charts) and for each types there are 3 available zones (one color for the goal, one if you over perform and one if you under perfom)
 		$stream_types = array(
 			array('type' => 'traffic', 'title' => $this->l('Traffic'), 'unit_text' => $this->l('visits')),
-			array('type' => 'conversion', 'title' => $this->l('Conversion')),
-			array('type' => 'avg_cart_value', 'title' => $this->l('Average cart value')),
-			array('type' => 'sales', 'title' => $this->l('Sales'))
+			array('type' => 'conversion', 'title' => $this->l('Conversion'), 'unit_text' => ''),
+			array('type' => 'avg_cart_value', 'title' => $this->l('Average cart value'), 'unit_text' => ''),
+			array('type' => 'sales', 'title' => $this->l('Sales'), 'unit_text' => '')
 		);
 		$stream_zones = array(
 			array('zone' => 'real', 'text' => ''),
