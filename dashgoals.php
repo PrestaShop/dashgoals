@@ -247,7 +247,7 @@ class DashGoals extends Module
 				$stream_values['real']['traffic'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['traffic'] = $value;
 				$stream_values['more']['traffic'] = $value;
@@ -273,15 +273,15 @@ class DashGoals extends Module
 				$stream_values['real']['conversion'] = round($value, 2);
 				$stream_values['real']['goal'] = round($month_goal, 2);
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['conversion'] = $value;
 				$stream_values['more']['conversion'] = $value;
 
 				if ($value > 0 && $value < $month_goal)
-					$stream_values['less']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['less']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 				elseif ($value > 0)
-					$stream_values['more']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['more']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				if ($value == 0)
 				{
@@ -299,7 +299,7 @@ class DashGoals extends Module
 				$stream_values['real']['avg_cart_value'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['avg_cart_value'] = $value;
 				$stream_values['more']['avg_cart_value'] = $value;
@@ -326,7 +326,7 @@ class DashGoals extends Module
 				$stream_values['real']['goal'] = $month_goal;
 
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['sales'] = $value;
 				$stream_values['more']['sales'] = $value;
@@ -376,7 +376,7 @@ class DashGoals extends Module
 				$stream_values['real']['traffic'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['traffic'] = $value;
 				$stream_values['more']['traffic'] = $value;
@@ -402,15 +402,15 @@ class DashGoals extends Module
 				$stream_values['real']['conversion'] = round($value, 2);
 				$stream_values['real']['goal'] = round($month_goal, 2);
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['conversion'] = $value;
 				$stream_values['more']['conversion'] = $value;
 
 				if ($value > 0 && $value < $month_goal)
-					$stream_values['less']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['less']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 				elseif ($value > 0)
-					$stream_values['more']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['more']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				if ($value == 0)
 				{
@@ -428,7 +428,7 @@ class DashGoals extends Module
 				$stream_values['real']['avg_cart_value'] = $value;
 				$stream_values['real']['goal'] = $month_goal;
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['avg_cart_value'] = $value;
 				$stream_values['more']['avg_cart_value'] = $value;
@@ -454,7 +454,7 @@ class DashGoals extends Module
 				$stream_values['real']['goal'] = $month_goal;
 
 				if ($value > 0)
-					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / $month_goal, 2);
+					$stream_values['real']['goal_diff'] = round(($goal_diff * 100) / ($month_goal > 0 ? $month_goal : 1), 2);
 
 				$stream_values['less']['sales'] = $value;
 				$stream_values['more']['sales'] = $value;
