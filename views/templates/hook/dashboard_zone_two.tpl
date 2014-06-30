@@ -35,7 +35,7 @@
 <section id="dashgoals" class="panel widget">
 	<header class="panel-heading">
 		<i class="icon-bar-chart"></i>
-		{l s='Your forecast' mod='dashgoals'}
+		{l s='Forecast' mod='dashgoals'}
 		<span id="dashgoals_title" class="badge">{$goals_year}</span>
 		<span class="btn-group">
 			<a href="javascript:void(0);" onclick="dashgoals_changeYear('backward');" class="btn btn-default btn-xs"><i class="icon-backward"></i></a>
