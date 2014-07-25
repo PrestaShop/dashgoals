@@ -422,7 +422,7 @@ class DashGoals extends Module
 					$streams['conversion'][$stream_zone['zone']]['values'][] = $stream_values[$stream_zone['zone']];
 
 				$month_goal = ConfigurationKPI::get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
-				$value = ((isset($orders[$timestamp]) && $orders[$timestamp] && isset($sales[$timestamp]) && $sales[$timestamp]) ? ($sales[$timestamp] / $orders[$timestamp]) : 0);
+				$value = (isset($sales[$timestamp]) && $sales[$timestamp]) ? $sales[$timestamp] : 0;
 				$stream_values = $this->getValuesFromGoals($average_goals['avg_cart_value'], $month_goal, $value, Dashgoals::$month_labels[$i]);
 				$goal_diff = $value - $month_goal;
 				$stream_values['real']['avg_cart_value'] = $value;
