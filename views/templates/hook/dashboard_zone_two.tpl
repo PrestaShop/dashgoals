@@ -43,10 +43,10 @@
 		</span>
 		
 		<span class="panel-heading-action">
-			<a class="list-toolbar-btn" href="javascript:void(0);" onclick="toggleDashConfig('dashgoals');" title="configure">
+			<a class="list-toolbar-btn" href="javascript:void(0);" onclick="toggleDashConfig('dashgoals');" title="{l s='Configure' mod='dashgoals'}">
 				<i class="process-icon-configure"></i>
 			</a>
-			<a class="list-toolbar-btn" href="javascript:void(0);" onclick="refreshDashboard('dashgoals');" title="refresh">
+			<a class="list-toolbar-btn" href="javascript:void(0);" onclick="refreshDashboard('dashgoals');" title="{l s='Refresh' mod='dashgoals'}">
 				<i class="process-icon-refresh"></i>
 			</a>
 		</span>
