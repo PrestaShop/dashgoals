@@ -207,10 +207,11 @@ class DashGoals extends Module
 					'zone_text' => $stream_zone['text'],
 					'color' => ($stream_zone['zone'] == 'more' ? self::$more_color[$key] : ($stream_zone['zone'] == 'less' ? self::$less_color[$key] : self::$real_color[$key])),
 					'values' => array(),
-					'disabled' => $stream_type['type'] == 'sales' ? false : true
+					'disabled' => (isset($stream_type['type']) && $stream_type['type'] == 'sales') ? false : true
 				);
 
-			$average_goals[$stream_type['type']] = 0;
+			if (isset($stream_type['type']))
+				$average_goals[$stream_type['type']] = 0;
 		}
 
 		if (Configuration::get('PS_DASHBOARD_SIMULATION'))
