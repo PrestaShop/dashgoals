@@ -1,8 +1,8 @@
-# 
+# Dashboard Goals
 
 ## About
 
-
+Adds a block with your store\'s forecast.
 
 ## Contributing
 
