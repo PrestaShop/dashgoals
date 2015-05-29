@@ -43,6 +43,6 @@ class AdminDashgoalsController extends ModuleAdminController
 			)
 		);
 
-		echo $this->module->display(_PS_MODULE_DIR_.$this->module->name.DIRECTORY_SEPARATOR.$this->module->name.'.php', 'config.tpl');
+		die($this->module->display(_PS_MODULE_DIR_.$this->module->name.DIRECTORY_SEPARATOR.$this->module->name.'.php', 'config.tpl'));
 	}
 }
