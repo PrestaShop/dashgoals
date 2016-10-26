@@ -14,22 +14,45 @@ function bar_chart_goals(widget_name, chart_details)
 					return '';
 
 				if (key == 'sales_real') {
-					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + formatCurrency(parseInt(graph.point.sales), currency_format, currency_sign, currency_blank) + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')<br/>';
-					if (graph.point.sales > graph.point.goal)
+					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>%graph.point.sales%</strong><br />(%graph.point.goal%)<br/>';
+					result = formatCurrencyCldr(parseInt(graph.point.sales), function(v) {
+            return result.replace('%graph.point.sales%', v);
+          });
+          result = formatCurrencyCldr(parseInt(graph.point.goal), function(v) {
+            return result.replace('%graph.point.goal%', v);
+          });
+          if (graph.point.sales > graph.point.goal)
 						result += '<span class="dash_trend dash_trend_up">+';
 					else
 						result += '<span class="dash_trend dash_trend_down">';
 					result += graph.point.goal_diff + '%</span></div>';
 					return result;
 				} else if (key == 'sales_less') {
-					if (graph.point.sales > 0)
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
-					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
-				} else if (key == 'sales_more')
-					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
+					if (graph.point.sales > 0) {
+            return formatCurrencyCldr(parseInt(graph.point.goal_diff), function(v) {
+              var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">%graph.point.goal_diff%</span></div>';
+              return str.replace('%graph.point.goal_diff%', v);
+            });
+          } else {
+            return formatCurrencyCldr(parseInt(graph.point.goal), function(v) {
+              var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(%graph.point.goal%<)</div>';
+              return str.replace('%graph.point.goal%', v);
+            });
+          }
+				} else if (key == 'sales_more') {
+          return formatCurrencyCldr(parseInt(graph.point.goal_diff), function(v) {
+            var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+%graph.point.goal_diff%</span></div>';
+            return str.replace('%graph.point.goal_diff%', v);
+          });
+        }
 				else if (key == 'avg_cart_value_real') {
-					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + formatCurrency(parseInt(graph.point.avg_cart_value), currency_format, currency_sign, currency_blank) + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')<br/>';
+					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>%graph.point.avg_cart_value%</strong><br />(%graph.point.goal%)<br/>';
+          result = formatCurrencyCldr(parseInt(graph.point.avg_cart_value), function(v) {
+            return result.replace('%graph.point.avg_cart_value%', v);
+          });
+          result = formatCurrencyCldr(parseInt(graph.point.goal), function(v) {
+            return result.replace('%graph.point.goal%', v);
+          });
 					if (graph.point.avg_cart_value > graph.point.goal)
 						result += '<span class="dash_trend dash_trend_up">+';
 					else
@@ -37,13 +60,23 @@ function bar_chart_goals(widget_name, chart_details)
 					result += graph.point.goal_diff + '%</span></div>';
 					return result;
 				} else if (key == 'avg_cart_value_less') {
-					if (graph.point.avg_cart_value > 0)
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
-					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
-				} else if (key == 'avg_cart_value_more')
-					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
-				else if (key == 'traffic_real') {
+					if (graph.point.avg_cart_value > 0) {
+            return formatCurrencyCldr(parseInt(graph.point.goal_diff), function(v) {
+              var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">%graph.point.goal_diff%</span></div>';
+              return str.replace('%graph.point.goal_diff%', v);
+            });
+          } else {
+						return formatCurrencyCldr(parseInt(graph.point.goal), function(v) {
+              var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(%graph.point.goal%<)</div>';
+              return str.replace('%graph.point.goal%', v);
+            });
+          }
+				} else if (key == 'avg_cart_value_more') {
+          return formatCurrencyCldr(parseInt(graph.point.goal_diff), function(v) {
+            var str = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+%graph.point.goal_diff%</span></div>';
+            return str.replace('%graph.point.goal_diff%', v);
+          });
+        } else if (key == 'traffic_real') {
 					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.point.traffic + ' ' +graph.series.unit_text+'</strong><br />(' + graph.point.goal + ' ' +graph.series.unit_text+')<br/>';
 					if (graph.point.traffic > graph.point.goal)
 						result += '<span class="dash_trend dash_trend_up">+';
@@ -123,10 +156,16 @@ function dashgoals_calc_sales()
 	$('.dashgoals_sales').each(function() {
 		var key = $(this).attr('id').substr(16);
 		var sales = parseFloat($('#dashgoals_traffic_' + key).val()) * parseFloat($('#dashgoals_avg_cart_value_' + key).val()) * parseFloat($('#dashgoals_conversion_' + key).val()) / 100;
-		if (isNaN(sales))
-			$(this).text(formatCurrency(0, currency_format, currency_sign, currency_blank));
-		else
-			$(this).text(formatCurrency(parseInt(sales), currency_format, currency_sign, currency_blank));
+    var $this= $(this);
+		if (isNaN(sales)) {
+      formatCurrencyCldr(0, function(v) {
+        $this.text(v);
+      });
+    }	else {
+      formatCurrencyCldr(parseInt(sales), function(v) {
+        $this.text(v);
+      });
+    }
 	});
 }
 
