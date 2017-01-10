@@ -48,7 +48,7 @@ class dashgoals extends Module
 
         $this->displayName = $this->trans('Dashboard Goals', array(), 'Modules.Dashgoals.Admin');
         $this->description = $this->trans('Adds a block with your store\'s forecast.', array(), 'Modules.Dashgoals.Admin');
-        $this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7.1.0', 'max' => _PS_VERSION_);
 
         self::$month_labels = array(
             '01' => $this->trans('January', array(), 'Modules.Dashgoals.Admin'),
