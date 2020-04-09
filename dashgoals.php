@@ -71,16 +71,16 @@ class dashgoals extends Module
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', date('Y'));
         for ($month = '01'; $month <= 12; $month = sprintf('%02d', $month + 1)) {
             $key = Tools::strtoupper('dashgoals_traffic_'.$month.'_'.date('Y'));
-            if (!ConfigurationKPI::get($key)) {
-                ConfigurationKPI::updateValue($key, 600);
+            if (!Configuration::get($key)) {
+                Configuration::updateValue($key, 600);
             }
             $key = Tools::strtoupper('dashgoals_conversion_'.$month.'_'.date('Y'));
-            if (!ConfigurationKPI::get($key)) {
-                ConfigurationKPI::updateValue($key, 2);
+            if (!Configuration::get($key)) {
+                Configuration::updateValue($key, 2);
             }
             $key = Tools::strtoupper('dashgoals_avg_cart_value_'.$month.'_'.date('Y'));
-            if (!ConfigurationKPI::get($key)) {
-                ConfigurationKPI::updateValue($key, 80);
+            if (!Configuration::get($key)) {
+                Configuration::updateValue($key, 80);
             }
         }
 
@@ -133,9 +133,9 @@ class dashgoals extends Module
             foreach ($months as $month => &$month_row) {
                 $key = 'dashgoals_'.$type.'_'.$month;
                 if (Tools::isSubmit('submitDashGoals')) {
-                    ConfigurationKPI::updateValue(Tools::strtoupper($key), (float)Tools::getValue($key));
+                    Configuration::updateValue(Tools::strtoupper($key), (float)Tools::getValue($key));
                 }
-                $month_row['values'][$type] = ConfigurationKPI::get(Tools::strtoupper($key));
+                $month_row['values'][$type] = Configuration::get(Tools::strtoupper($key));
             }
         }
 
@@ -167,7 +167,7 @@ class dashgoals extends Module
         return array('data_chart' => array('dash_goals_chart1' => $this->getChartData($year)));
     }
 
-    protected function fakeConfigurationKPI_get($key)
+    protected function fakeConfiguration_get($key)
     {
         $start = array(
             'TRAFFIC' => 3000,
@@ -234,9 +234,9 @@ class dashgoals extends Module
 
             // We need to calculate the average value of each goals for the year, this will be the base rate for "100%"
             for ($i = '01'; $i <= 12; $i = sprintf('%02d', $i + 1)) {
-                $average_goals['traffic'] += $this->fakeConfigurationKPI_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year);
-                $average_goals['conversion'] += $this->fakeConfigurationKPI_get('DASHGOALS_CONVERSION_'.$i.'_'.$year);
-                $average_goals['avg_cart_value'] += $this->fakeConfigurationKPI_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
+                $average_goals['traffic'] += $this->fakeConfiguration_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year);
+                $average_goals['conversion'] += $this->fakeConfiguration_get('DASHGOALS_CONVERSION_'.$i.'_'.$year);
+                $average_goals['avg_cart_value'] += $this->fakeConfiguration_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
             }
             foreach ($average_goals as &$average_goal) {
                 $average_goal /= 12;
@@ -247,7 +247,7 @@ class dashgoals extends Module
             for ($i = '01'; $i <= 12; $i = sprintf('%02d', $i + 1)) {
                 $timestamp = strtotime($year.'-'.$i.'-01');
 
-                $month_goal = $this->fakeConfigurationKPI_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year);
+                $month_goal = $this->fakeConfiguration_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year);
                 $value = (isset($visits[$timestamp]) ? $visits[$timestamp] : 0);
                 $stream_values = $this->getValuesFromGoals($average_goals['traffic'], $month_goal, $value, self::$month_labels[$i]);
                 $goal_diff = $value - $month_goal;
@@ -275,7 +275,7 @@ class dashgoals extends Module
                     $streams['traffic'][$stream_zone['zone']]['values'][] = $stream_values[$stream_zone['zone']];
                 }
 
-                $month_goal = $this->fakeConfigurationKPI_get('DASHGOALS_CONVERSION_'.$i.'_'.$year);
+                $month_goal = $this->fakeConfiguration_get('DASHGOALS_CONVERSION_'.$i.'_'.$year);
                 $value = 100 * ((isset($visits[$timestamp]) && $visits[$timestamp] && isset($orders[$timestamp]) && $orders[$timestamp]) ? ($orders[$timestamp] / $visits[$timestamp]) : 0);
                 $stream_values = $this->getValuesFromGoals($average_goals['conversion'], $month_goal, $value, self::$month_labels[$i]);
                 $goal_diff = $value - $month_goal;
@@ -303,7 +303,7 @@ class dashgoals extends Module
                     $streams['conversion'][$stream_zone['zone']]['values'][] = $stream_values[$stream_zone['zone']];
                 }
 
-                $month_goal = $this->fakeConfigurationKPI_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
+                $month_goal = $this->fakeConfiguration_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
                 $value = ((isset($orders[$timestamp]) && $orders[$timestamp] && isset($sales[$timestamp]) && $sales[$timestamp]) ? ($sales[$timestamp] / $orders[$timestamp]) : 0);
                 $stream_values = $this->getValuesFromGoals($average_goals['avg_cart_value'], $month_goal, $value, self::$month_labels[$i]);
                 $goal_diff = $value - $month_goal;
@@ -331,7 +331,7 @@ class dashgoals extends Module
                     $streams['avg_cart_value'][$stream_zone['zone']]['values'][] = $stream_values[$stream_zone['zone']];
                 }
 
-                $month_goal = $this->fakeConfigurationKPI_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year) * $this->fakeConfigurationKPI_get('DASHGOALS_CONVERSION_'.$i.'_'.$year) / 100 * $this->fakeConfigurationKPI_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
+                $month_goal = $this->fakeConfiguration_get('DASHGOALS_TRAFFIC_'.$i.'_'.$year) * $this->fakeConfigurationKPI_get('DASHGOALS_CONVERSION_'.$i.'_'.$year) / 100 * $this->fakeConfigurationKPI_get('DASHGOALS_AVG_CART_VALUE_'.$i.'_'.$year);
                 $value = (isset($sales[$timestamp]) ? $sales[$timestamp] : 0);
                 $stream_values = $this->getValuesFromGoals($average_goals['sales'], $month_goal, $value, self::$month_labels[$i]);
                 $goal_diff = $value - $month_goal;
