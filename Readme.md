@@ -2,7 +2,7 @@
 
 ## About
 
-Adds a block with your store's forecast.
+Enrich your stats, add a block with your store’s forecast to always step ahead!
 
 ## Reporting issues
 
