@@ -40,7 +40,7 @@ class dashgoals extends Module
     public function __construct()
     {
         $this->name = 'dashgoals';
-        $this->tab = 'dashboard';
+        $this->tab = 'administration';
         $this->version = '2.0.2';
         $this->author = 'PrestaShop';
 
