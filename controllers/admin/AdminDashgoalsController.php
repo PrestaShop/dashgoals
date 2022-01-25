@@ -25,23 +25,26 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
+/**
+ * @property dashgoals $module
+ */
 class AdminDashgoalsController extends ModuleAdminController
 {
     public function ajaxProcessChangeConfYear()
     {
-        $year = (int)Tools::getValue('year');
+        $year = (int) Tools::getValue('year');
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', $year);
         $months = $this->module->setMonths($year);
 
         $this->context->smarty->assign(
-            array(
+            [
                 'currency' => $this->context->currency,
                 'goals_year' => $year,
                 'goals_months' => $months,
-                'link' => $this->context->link
-            )
+                'link' => $this->context->link,
+            ]
         );
 
-        die($this->module->display(_PS_MODULE_DIR_.$this->module->name.DIRECTORY_SEPARATOR.$this->module->name.'.php', 'config.tpl'));
+        exit($this->module->display(_PS_MODULE_DIR_ . $this->module->name . DIRECTORY_SEPARATOR . $this->module->name . '.php', 'config.tpl'));
     }
 }
