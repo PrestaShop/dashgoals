@@ -8,6 +8,12 @@ Enrich your stats, add a block with your store’s forecast to always step ahead
 
 PrestaShop: `1.7.1.0` or later
 
+## How to test
+
+If module is enabled, check that Forecast block is displayed and available in the Dashboard section .
+
+Link to specs : https://docs.prestashop-project.org/functional-documentation/functional-documentation/ux-ui/back-office/improve/modules/dashboard-goals-dashgoals
+
 ## Reporting issues
 
 You can report issues with this module in the main PrestaShop repository. [Click here to report an issue][report-issue]. 
