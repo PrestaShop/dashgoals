@@ -10,8 +10,7 @@ function bar_chart_goals(widget_name, chart_details)
 			.stacked(true)
 			.showControls(false)
 			.tooltipContent(function(key, y, e, graph) {
-				if (graph.value == 0)
-					return '';
+				if (!graph || graph.point == null || graph.value == null || graph.value == 0) return '';
 
 				if (key == 'sales_real') {
 					var result = '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + formatCurrency(parseInt(graph.point.sales), currency_format, currency_sign, currency_blank) + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')<br/>';
