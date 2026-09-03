@@ -1,0 +1,7 @@
+dashgoals_configuration:
+  path: /dashgoals/configuration
+  methods: [GET, POST]
+  defaults:
+    _controller: PrestaShop\Module\DashGoals\Controller\ConfigurationController::indexAction
+    _legacy_controller: AdminDashgoals
+    _legacy_link: AdminDashgoals
