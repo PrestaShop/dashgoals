@@ -48,8 +48,10 @@ class ConfigurationController extends FrameworkBundleAdminController
             // strings — normalize back to string.
             $month = (string) $month;
             foreach (self::TYPES as $type) {
-                // False (not numeric) when the key doesn't exist yet for this year/month.
+                // ConfigurationKPI::get() is documented as always returning string, but actually
+                // returns false when the key doesn't exist yet for this year/month.
                 $value = ConfigurationKPI::get($this->getConfigurationKey($type, $month, $year));
+                /* @phpstan-ignore-next-line */
                 $data[$type . '_' . $month] = $value === false ? 0 : $value;
             }
         }
