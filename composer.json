@@ -25,7 +25,10 @@
     "classmap": [
       "dashgoals.php",
       "controllers/"
-    ]
+    ],
+    "psr-4": {
+      "PrestaShop\\Module\\DashGoals\\": "src/"
+    }
   },
   "type": "prestashop-module"
 }

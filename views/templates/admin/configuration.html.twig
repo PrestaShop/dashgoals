@@ -1,0 +1,61 @@
+{#**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * This source file is subject to the Academic Free License 3.0 (AFL-3.0).
+ * It is also available through the world-wide-web at this URL: https://opensource.org/licenses/AFL-3.0
+ *#}
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-xl-10">
+      <form method="get" class="form-inline mb-3">
+        <input type="hidden" name="token" value="{{ token }}">
+        <label class="mr-2" for="dashgoals-year">{{ 'Year'|trans({}, 'Modules.Dashgoals.Admin') }}</label>
+        <select id="dashgoals-year" name="year" class="form-control mr-2" onchange="this.form.submit()">
+          {% for choice in range(year - 2, year + 2) %}
+            <option value="{{ choice }}" {{ choice == year ? 'selected' : '' }}>{{ choice }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      {{ form_start(configurationForm) }}
+        <div class="card">
+          <h3 class="card-header">
+            <i class="material-icons">settings</i>
+            {{ 'Monthly goals settings'|trans({}, 'Modules.Dashgoals.Admin') }} — {{ year }}
+          </h3>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>{{ year }}</th>
+                  <th>{{ 'Traffic'|trans({}, 'Modules.Dashgoals.Admin') }}</th>
+                  <th>{{ 'Conversion Rate'|trans({}, 'Modules.Dashgoals.Admin') }}</th>
+                  <th>{{ 'Average Cart Value'|trans({}, 'Modules.Dashgoals.Admin') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for month, label in monthLabels %}
+                  <tr>
+                    <td>{{ label }}</td>
+                    <td>{{ form_widget(attribute(configurationForm, 'traffic_' ~ month)) }}</td>
+                    <td>{{ form_widget(attribute(configurationForm, 'conversion_' ~ month)) }}</td>
+                    <td>{{ form_widget(attribute(configurationForm, 'avg_cart_value_' ~ month)) }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-primary">{{ 'Save'|trans({}, 'Admin.Actions') }}</button>
+            </div>
+          </div>
+        </div>
+        {{ form_rest(configurationForm) }}
+      {{ form_end(configurationForm, {render_rest: false}) }}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{#
+ # For the full copyright and license information, please view the
+ # docs/licenses/LICENSE.txt file that was distributed with this source code.
+ #}
+{% import '@PrestaShop/Admin/Dashboard/_partials/card_header.html.twig' as dashboard %}
+
+<div class="card">
+  {{ dashboard.renderCardHeader(title, 'bar_chart', configUrl) }}
+  <div class="card-body">
+    <canvas id="{{ chartId }}" data-chart height="160" role="img" aria-label="{{ title }}"></canvas>
+    <script type="application/json" id="{{ chartId }}-data">{{ chartConfig|raw }}</script>
+  </div>
+</div>
