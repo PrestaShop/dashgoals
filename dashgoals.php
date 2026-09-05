@@ -131,7 +131,12 @@ class dashgoals extends Module
         foreach (self::$types as $type) {
             foreach ($months as $month => &$month_row) {
                 $key = 'dashgoals_' . $type . '_' . $month;
-                if (Tools::isSubmit('submitDashGoals')) {
+                // Only write a field the form actually sent. The year being edited comes from
+                // PS_DASHGOALS_CURRENT_YEAR rather than from the form, so a form rendered for one year can
+                // be submitted while the stored year is another one. None of its keys match then, and
+                // Tools::getValue() returning false would store (float) false = 0 over every goal of the
+                // year now selected.
+                if (Tools::isSubmit('submitDashGoals') && Tools::getIsset($key)) {
                     ConfigurationKPI::updateValue(Tools::strtoupper($key), (float) Tools::getValue($key));
                 }
                 $month_row['values'][$type] = ConfigurationKPI::get(Tools::strtoupper($key));
