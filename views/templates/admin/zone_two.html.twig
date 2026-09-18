@@ -2,12 +2,11 @@
  # For the full copyright and license information, please view the
  # docs/licenses/LICENSE.txt file that was distributed with this source code.
  #}
-{% import '@PrestaShop/Admin/Dashboard/_partials/card_header.html.twig' as dashboard %}
-{% import '@PrestaShop/Admin/Dashboard/_partials/chart.html.twig' as chart %}
-
-<div class="card">
-  {{ dashboard.renderCardHeader(title, 'bar_chart', configUrl) }}
-  <div class="card-body">
-    {{ chart.renderChart(chartId, chartConfig, {height: 320, label: title}) }}
-  </div>
-</div>
+{{ component('ChartCard', {
+  chartId: chartId,
+  config: chartConfig,
+  height: 320,
+  title: title,
+  icon: 'bar_chart',
+  configUrl: configUrl,
+}) }}
