@@ -1,0 +1,10 @@
+services:
+  PrestaShop\Module\DashGoals\Controller\ConfigurationController:
+    public: true
+    autowire: true
+    autoconfigure: true
+
+  PrestaShop\Module\DashGoals\Type\ConfigurationType:
+    autowire: true
+    autoconfigure: true
+    tags: ['form.type']
