@@ -28,10 +28,16 @@ use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ConfigurationController extends FrameworkBundleAdminController
 {
     private const TYPES = ['traffic', 'conversion', 'avg_cart_value'];
+
+    // Wide enough to cover any real past/future goal-setting use case; guards against
+    // ?year= producing an out-of-range key (e.g. `abc` casts to 0) instead of silently
+    // reading/writing DASHGOALS_*_0 and moving the dashboard's displayed year to 0.
+    private const YEAR_RANGE = 10;
 
     /**
      * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
@@ -42,7 +48,11 @@ class ConfigurationController extends FrameworkBundleAdminController
         $module = Module::getInstanceByName('dashgoals');
         $monthLabels = $module->getMonthLabels();
 
+        $currentYear = (int) date('Y');
         $year = (int) $request->query->get('year', (int) Configuration::get('PS_DASHGOALS_CURRENT_YEAR'));
+        if ($year < $currentYear - self::YEAR_RANGE || $year > $currentYear + self::YEAR_RANGE) {
+            throw new NotFoundHttpException(sprintf('Invalid year "%d".', $year));
+        }
 
         $data = [];
         foreach (array_keys($monthLabels) as $month) {
@@ -63,6 +73,15 @@ class ConfigurationController extends FrameworkBundleAdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->denyAccessUnlessGranted('update', $request->attributes->get('_legacy_controller'));
+
+            // No @DemoRestricted attribute here: its listener only recognizes the PHP 8
+            // attribute form (PrestaShopBundle\Security\Attribute\DemoRestricted), which
+            // doesn't exist on PS 8.2 — this module's declared minimum version.
+            if ($this->isDemoModeEnabled()) {
+                $this->addFlash('error', $this->trans('This functionality has been disabled.', 'Admin.Notifications.Error'));
+
+                return $this->redirectToRoute('dashgoals_configuration', ['year' => $year]);
+            }
 
             foreach ($form->getData() as $field => $value) {
                 [$type, $month] = $this->splitFieldName($field);

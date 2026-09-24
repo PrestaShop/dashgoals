@@ -44,7 +44,7 @@ class dashgoals extends Module
     {
         $this->name = 'dashgoals';
         $this->tab = 'administration';
-        $this->version = '2.1.0';
+        $this->version = '3.0.0';
         $this->author = 'PrestaShop';
 
         parent::__construct();
