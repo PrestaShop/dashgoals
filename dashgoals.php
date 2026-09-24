@@ -24,6 +24,9 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
+use Twig\Environment;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -41,7 +44,7 @@ class dashgoals extends Module
     {
         $this->name = 'dashgoals';
         $this->tab = 'administration';
-        $this->version = '2.0.5';
+        $this->version = '3.0.0';
         $this->author = 'PrestaShop';
 
         parent::__construct();
@@ -64,6 +67,14 @@ class dashgoals extends Module
             '11' => $this->trans('November', [], 'Modules.Dashgoals.Admin'),
             '12' => $this->trans('December', [], 'Modules.Dashgoals.Admin'),
         ];
+    }
+
+    /**
+     * @return array<string, string> month number (e.g. '01') => translated month name
+     */
+    public function getMonthLabels(): array
+    {
+        return self::$month_labels;
     }
 
     public function install()
@@ -98,9 +109,12 @@ class dashgoals extends Module
         return
             $tab->add()
             && parent::install()
+            && $this->createConfigurationTab()
             && $this->registerHook('dashboardZoneTwo')
             && $this->registerHook('dashboardData')
-            && $this->registerHook('actionAdminControllerSetMedia');
+            && $this->registerHook('actionAdminControllerSetMedia')
+            // Modern counterpart of dashboardZoneTwo, registered alongside it (#41971).
+            && $this->registerHook('displayAdminDashboardZoneTwo');
     }
 
     public function uninstall()
@@ -111,7 +125,45 @@ class dashgoals extends Module
             $tab->delete();
         }
 
+        $idConfigurationTab = (int) Tab::getIdFromClassName('AdminDashgoalsConfiguration');
+        if ($idConfigurationTab) {
+            (new Tab($idConfigurationTab))->delete();
+        }
+
         return parent::uninstall();
+    }
+
+    public function getContent()
+    {
+        Tools::redirectAdmin(
+            SymfonyContainer::getInstance()->get('router')->generate('dashgoals_configuration')
+        );
+    }
+
+    /**
+     * Hidden tab (id_parent -1): only used to back the settings route's ACL. A dedicated tab,
+     * distinct from AdminDashgoals — the settings route must not reuse that class name, since
+     * it's still the legacy dashboard's real controller (AdminDashgoalsController). Shared
+     * between install() and the 3.0.0 upgrade script so shops upgrading from an earlier version
+     * get it too.
+     */
+    public function createConfigurationTab(): bool
+    {
+        if (Tab::getIdFromClassName('AdminDashgoalsConfiguration')) {
+            return true;
+        }
+
+        $tab = new Tab();
+        $tab->active = true;
+        $tab->class_name = 'AdminDashgoalsConfiguration';
+        $tab->name = [];
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = 'Dashgoals configuration';
+        }
+        $tab->id_parent = -1;
+        $tab->module = $this->name;
+
+        return $tab->add();
     }
 
     public function hookActionAdminControllerSetMedia()
@@ -164,6 +216,91 @@ class dashgoals extends Module
         $year = ((isset($params['extra']) && $params['extra'] > 1970 && $params['extra'] < 2999) ? $params['extra'] : Configuration::get('PS_DASHGOALS_CURRENT_YEAR'));
 
         return ['data_chart' => ['dash_goals_chart1' => $this->getChartData($year)]];
+    }
+
+    /**
+     * Modern counterpart of hookDashboardZoneTwo(). No year picker on this hook: always uses
+     * PS_DASHGOALS_CURRENT_YEAR.
+     */
+    public function hookDisplayAdminDashboardZoneTwo(array $params)
+    {
+        $year = Configuration::get('PS_DASHGOALS_CURRENT_YEAR');
+        $chartData = $this->getChartData($year);
+
+        return $this->render('zone_two.html.twig', [
+            'title' => $this->trans('Monthly goals', [], 'Modules.Dashgoals.Admin'),
+            'chartId' => 'dashgoals-sales',
+            'chartConfig' => $this->getSalesGoalChartConfig($chartData['data']),
+            'configUrl' => $this->getConfigUrl(),
+        ]);
+    }
+
+    private function render(string $template, array $params = []): string
+    {
+        $twig = $this->get('twig');
+        if (!$twig instanceof Environment) {
+            return '';
+        }
+
+        return $twig->render('@Modules/dashgoals/views/templates/admin/' . $template, $params);
+    }
+
+    /**
+     * Null (no "Configure" link shown) when the current employee can't configure this module.
+     */
+    private function getConfigUrl(): ?string
+    {
+        if (!Tab::checkTabRights((int) Tab::getIdFromClassName('AdminDashgoalsConfiguration'))) {
+            return null;
+        }
+
+        return SymfonyContainer::getInstance()->get('router')->generate('dashgoals_configuration');
+    }
+
+    /**
+     * Plain Chart.js config for the "sales" stream (goal vs actual per month).
+     *
+     * @param array $streams flat list from getChartData()['data'], one entry per {type}_{zone}
+     */
+    private function getSalesGoalChartConfig(array $streams): array
+    {
+        $salesReal = [];
+        foreach ($streams as $stream) {
+            if ($stream['key'] === 'sales_real') {
+                $salesReal = $stream['values'];
+                break;
+            }
+        }
+
+        $labels = [];
+        $goal = [];
+        $actual = [];
+        foreach ($salesReal as $month) {
+            $labels[] = $month['x'];
+            $goal[] = round((float) ($month['goal'] ?? 0), 2);
+            $actual[] = round((float) ($month['sales'] ?? 0), 2);
+        }
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'labels' => $labels,
+                'datasets' => [
+                    [
+                        'label' => $this->trans('Goal', [], 'Modules.Dashgoals.Admin'),
+                        'data' => $goal,
+                    ],
+                    [
+                        'label' => $this->trans('Sales', [], 'Admin.Global'),
+                        'data' => $actual,
+                    ],
+                ],
+            ],
+            'options' => [
+                'plugins' => ['legend' => ['position' => 'bottom']],
+                'scales' => ['y' => ['beginAtZero' => true]],
+            ],
+        ];
     }
 
     /**
