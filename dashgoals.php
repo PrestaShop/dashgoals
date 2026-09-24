@@ -144,7 +144,7 @@ class dashgoals extends Module
      * Hidden tab (id_parent -1): only used to back the settings route's ACL. A dedicated tab,
      * distinct from AdminDashgoals — the settings route must not reuse that class name, since
      * it's still the legacy dashboard's real controller (AdminDashgoalsController). Shared
-     * between install() and the 2.1.0 upgrade script so shops upgrading from an earlier version
+     * between install() and the 3.0.0 upgrade script so shops upgrading from an earlier version
      * get it too.
      */
     public function createConfigurationTab(): bool
