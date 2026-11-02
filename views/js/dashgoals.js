@@ -75,7 +75,8 @@ function bar_chart_goals(widget_name, chart_details)
 
 		var chart = nv.models.multiBarChart()
 			.stacked(true)
-			.showControls(false);
+			.showControls(false)
+			.showLegend(false);
 
 		chart.tooltip.contentGenerator(function(d) {
 			if (!d || d.data == null) return '';
@@ -105,8 +106,6 @@ function bar_chart_goals(widget_name, chart_details)
 			.datum(chart_details.data)
 			.transition()
 			.call(chart);
-
-		$('#dash_goals_chart1 .nv-legendWrap').remove();
 
 		nv.utils.windowResize(chart.update);
 
